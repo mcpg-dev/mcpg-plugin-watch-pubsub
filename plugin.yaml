@@ -1,0 +1,44 @@
+schema: mcpg.dev/plugin/v1
+id: dev.mcpg.watch.pubsub
+name: Google Cloud Pub/Sub Watch Strategy
+license: Apache-2.0
+description: |
+  Consumes a Google Cloud Pub/Sub subscription, or one on the Pub/Sub
+  emulator, as MCP Events. The `pubsub_subscription` strategy streams the
+  subscription; each message is one `pubsub.message` event, acknowledged once
+  the gateway has stored it and nacked when the gateway has not done so in
+  `ack_timeout_ms`, so delivery is at-least-once and the Pub/Sub message id
+  lets the gateway take a redelivered message once. Credentials are a Google
+  credentials file (a service account key, an authorized user file or a
+  Workload Identity Federation configuration) or Application Default
+  Credentials (`GOOGLE_APPLICATION_CREDENTIALS`, the metadata server).
+class: watch_strategy
+runtime: native-cdylib-v1
+protocol_version: "1.0"
+required_capabilities: [network_outbound]
+# MCP Events: Pub/Sub keeps what is not acknowledged, so the watch needs no
+# stored position.
+watch_strategies:
+  - kind: pubsub_subscription
+    placement: single_owner
+    resume: false
+    event_types:
+      - name: pubsub.message
+        description: One message received on the watched subscription. The eventId is the Pub/Sub message id.
+        payload_schema:
+          type: object
+          required: [subscription, messageId, attributes, body, bodyEncoding]
+          properties:
+            subscription: { type: string }
+            messageId: { type: string }
+            publishTime: { type: string, description: When Pub/Sub received the message, RFC 3339. }
+            orderingKey: { type: string }
+            deliveryAttempt: { type: integer, description: Set when the subscription has a dead-letter policy. }
+            attributes: { type: object, additionalProperties: { type: string } }
+            body:
+              description: The message data, read as bodyEncoding says; null when bodyTruncated.
+            bodyEncoding:
+              description: How body holds the message data - its JSON, its UTF-8 text, or standard base64 of its bytes.
+              enum: [json, text, base64, null]
+            bodyTruncated: { type: boolean, description: The data was larger than max_body_bytes and is left out. }
+            bodySize: { type: integer, description: The size of data left out, in bytes. }
