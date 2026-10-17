@@ -1,6 +1,6 @@
 [package]
 name = "mcpg-plugin-watch-pubsub"
-version = "0.1.0-alpha.1"
+version = "0.1.0-alpha.2"
 license = "Apache-2.0"
 edition = "2024"
 description = "Google Cloud Pub/Sub watch_strategy plugin for MCPG (dev.mcpg.watch.pubsub) — each message on a subscription as an MCP Event, acknowledged only once the gateway has stored it."
@@ -21,8 +21,8 @@ static-firstparty = []
 integration-tests = []
 
 [dependencies]
-mcpg-plugin-protocol = { git = "https://github.com/mcpg-dev/mcpg-plugin-protocol", tag = "v0.1.0-beta.40", version = "=0.1.0-beta.40" }
-mcpg-plugin-sdk = { git = "https://github.com/mcpg-dev/mcpg-plugin-sdk", tag = "v0.1.0-beta.41", version = "=0.1.0-beta.41", features = ["static-firstparty"] }
+mcpg-plugin-protocol = { git = "https://github.com/mcpg-dev/mcpg-plugin-protocol", tag = "v0.1.0-beta.41", version = "=0.1.0-beta.41" }
+mcpg-plugin-sdk = { git = "https://github.com/mcpg-dev/mcpg-plugin-sdk", tag = "v0.1.0-beta.42", version = "=0.1.0-beta.42", features = ["static-firstparty"] }
 # Pub/Sub over gRPC (yoshidan/google-cloud-rust, the family the BigQuery
 # backend uses): rustls TLS, service-account, authorized-user,
 # metadata-server and external-account (Workload Identity Federation) auth,
