@@ -1,6 +1,6 @@
 [package]
 name = "mcpg-plugin-watch-pubsub"
-version = "0.1.0-rc.5"
+version = "0.1.0"
 license = "Apache-2.0"
 edition = "2024"
 description = "Google Cloud Pub/Sub watch_strategy plugin for MCPG (dev.mcpg.watch.pubsub) — each message on a subscription as an MCP Event, acknowledged only once the gateway has stored it."
